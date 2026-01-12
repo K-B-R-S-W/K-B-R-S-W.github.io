@@ -744,6 +744,8 @@
   <!-- ========== PROJECTS SECTION ========== -->
   <section class="projects" id="projects">
     <h2 class="section-title">Featured <span>Projects</span></h2>
+    <div class="projects-container">
+      <div class="projects-wrapper">
         <div class="projects-grid">
           
           <div class="project-card">
@@ -1052,72 +1054,61 @@
     const nextBtn = document.getElementById('nextBtn');
     const dotsContainer = document.getElementById('projectDots');
     
-    if (projectsWrapper && projectCards.length > 0 && prevBtn && nextBtn && dotsContainer) {
-      let currentIndex = 0;
-      let cardsPerView = window.innerWidth > 768 ? 3 : 1;
-      let totalSlides = Math.ceil(projectCards.length / cardsPerView);
+    let currentIndex = 0;
+    const cardsPerView = window.innerWidth > 768 ? 3 : 1;
+    const totalSlides = Math.ceil(projectCards.length / cardsPerView);
 
-      // Create dots
-      function createDots() {
-        dotsContainer.innerHTML = '';
-        totalSlides = Math.ceil(projectCards.length / cardsPerView);
-        for (let i = 0; i < totalSlides; i++) {
-          const dot = document.createElement('div');
-          dot.classList.add('project-dot');
-          if (i === 0) dot.classList.add('active');
-          dot.addEventListener('click', () => goToSlide(i));
-          dotsContainer.appendChild(dot);
-        }
-      }
+    // Create dots
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('project-dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    }
 
-      function updateSlider() {
-        const cardWidth = projectCards[0].offsetWidth;
-        const gap = 40; // 2.5rem = 40px
-        const offset = currentIndex * cardsPerView * (cardWidth + gap);
-        projectsWrapper.style.transform = `translateX(-${offset}px)`;
-        
-        // Update dots
-        document.querySelectorAll('.project-dot').forEach((dot, index) => {
-          dot.classList.toggle('active', index === currentIndex);
-        });
-        
-        // Update buttons
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex >= totalSlides - 1;
-      }
-
-      function goToSlide(index) {
-        currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
-        updateSlider();
-      }
-
-      prevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
-          currentIndex--;
-          updateSlider();
-        }
+    function updateSlider() {
+      const cardWidth = projectCards[0].offsetWidth;
+      const gap = 40; // 2.5rem = 40px
+      const offset = currentIndex * (cardWidth + gap) * cardsPerView;
+      projectsWrapper.style.transform = `translateX(-${offset}px)`;
+      
+      // Update dots
+      document.querySelectorAll('.project-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentIndex);
       });
+      
+      // Update buttons
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === totalSlides - 1;
+    }
 
-      nextBtn.addEventListener('click', () => {
-        if (currentIndex < totalSlides - 1) {
-          currentIndex++;
-          updateSlider();
-        }
-      });
-
-      // Update on window resize
-      window.addEventListener('resize', () => {
-        cardsPerView = window.innerWidth > 768 ? 3 : 1;
-        totalSlides = Math.ceil(projectCards.length / cardsPerView);
-        currentIndex = Math.min(currentIndex, totalSlides - 1);
-        createDots();
-        updateSlider();
-      });
-
-      // Initialize
-      createDots();
+    function goToSlide(index) {
+      currentIndex = index;
       updateSlider();
     }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlider();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < totalSlides - 1) {
+        currentIndex++;
+        updateSlider();
+      }
+    });
+
+    // Update on window resize
+    window.addEventListener('resize', () => {
+      updateSlider();
+    });
+
+    // Initialize
+    updateSlider();
 
     // ========== SMOOTH SCROLL ==========
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
