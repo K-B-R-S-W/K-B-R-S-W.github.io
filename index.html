@@ -302,13 +302,15 @@
       display: flex;
       gap: 2.5rem;
       margin-top: 3rem;
-      transition: transform 0.5s ease;
+      perspective: 1200px;
+      position: relative;
     }
 
     .projects-grid {
       display: flex;
       gap: 2.5rem;
       min-width: 100%;
+      position: relative;
     }
 
     .project-card {
@@ -316,11 +318,28 @@
       padding: 2rem;
       border-radius: 15px;
       border: 2px solid transparent;
-      transition: all 0.3s ease;
+      transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       position: relative;
       overflow: hidden;
       flex: 0 0 calc(33.333% - 1.67rem);
       min-width: 350px;
+      transform-origin: center center;
+      opacity: 1;
+    }
+
+    .project-card.card-exit {
+      transform: rotateX(-90deg) translateY(-100px);
+      opacity: 0;
+    }
+
+    .project-card.card-enter {
+      transform: rotateX(90deg) translateY(100px);
+      opacity: 0;
+    }
+
+    .project-card.card-active {
+      transform: rotateX(0deg) translateY(0);
+      opacity: 1;
     }
 
     .project-card::before {
@@ -1047,7 +1066,7 @@
 
     typeRole();
 
-    // ========== PROJECT SLIDER ==========
+    // ========== PROJECT SLIDER WITH CIRCULAR TRANSITION ==========
     const projectsWrapper = document.querySelector('.projects-wrapper');
     const projectCards = document.querySelectorAll('.project-card');
     const prevBtn = document.getElementById('prevBtn');
@@ -1067,11 +1086,33 @@
       dotsContainer.appendChild(dot);
     }
 
-    function updateSlider() {
-      const cardWidth = projectCards[0].offsetWidth;
-      const gap = 40; // 2.5rem = 40px
-      const offset = currentIndex * (cardWidth + gap) * cardsPerView;
-      projectsWrapper.style.transform = `translateX(-${offset}px)`;
+    function updateSlider(direction = 'next') {
+      // Remove all animation classes first
+      projectCards.forEach(card => {
+        card.classList.remove('card-exit', 'card-enter', 'card-active');
+      });
+
+      // Determine visible cards range
+      const startIndex = currentIndex * cardsPerView;
+      const endIndex = startIndex + cardsPerView;
+
+      projectCards.forEach((card, index) => {
+        if (index >= startIndex && index < endIndex) {
+          // Visible cards - apply enter animation
+          card.classList.add('card-enter');
+          setTimeout(() => {
+            card.classList.remove('card-enter');
+            card.classList.add('card-active');
+            card.style.display = 'block';
+          }, 50);
+        } else {
+          // Hidden cards
+          card.classList.add('card-exit');
+          setTimeout(() => {
+            card.style.display = 'none';
+          }, 600);
+        }
+      });
       
       // Update dots
       document.querySelectorAll('.project-dot').forEach((dot, index) => {
@@ -1084,21 +1125,22 @@
     }
 
     function goToSlide(index) {
+      const direction = index > currentIndex ? 'next' : 'prev';
       currentIndex = index;
-      updateSlider();
+      updateSlider(direction);
     }
 
     prevBtn.addEventListener('click', () => {
       if (currentIndex > 0) {
         currentIndex--;
-        updateSlider();
+        updateSlider('prev');
       }
     });
 
     nextBtn.addEventListener('click', () => {
       if (currentIndex < totalSlides - 1) {
         currentIndex++;
-        updateSlider();
+        updateSlider('next');
       }
     });
 
@@ -1107,7 +1149,14 @@
       updateSlider();
     });
 
-    // Initialize
+    // Initialize - show first set of cards
+    projectCards.forEach((card, index) => {
+      if (index < cardsPerView) {
+        card.classList.add('card-active');
+      } else {
+        card.style.display = 'none';
+      }
+    });
     updateSlider();
 
     // ========== SMOOTH SCROLL ==========
