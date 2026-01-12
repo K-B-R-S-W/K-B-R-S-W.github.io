@@ -1098,16 +1098,32 @@
 
       projectCards.forEach((card, index) => {
         if (index >= startIndex && index < endIndex) {
-          // Visible cards - apply enter animation
-          card.classList.add('card-enter');
+          // Visible cards - apply enter animation based on direction
+          if (direction === 'next') {
+            // Enter from bottom (rotate up from below)
+            card.style.transform = 'rotateX(90deg) translateY(100px)';
+            card.style.opacity = '0';
+          } else {
+            // Enter from top (rotate down from above)
+            card.style.transform = 'rotateX(-90deg) translateY(-100px)';
+            card.style.opacity = '0';
+          }
+          card.style.display = 'block';
+          
           setTimeout(() => {
-            card.classList.remove('card-enter');
-            card.classList.add('card-active');
-            card.style.display = 'block';
+            card.style.transform = 'rotateX(0deg) translateY(0)';
+            card.style.opacity = '1';
           }, 50);
         } else {
-          // Hidden cards
-          card.classList.add('card-exit');
+          // Hidden cards - exit based on direction
+          if (direction === 'next') {
+            // Exit to top (rotate up and out)
+            card.style.transform = 'rotateX(-90deg) translateY(-100px)';
+          } else {
+            // Exit to bottom (rotate down and out)
+            card.style.transform = 'rotateX(90deg) translateY(100px)';
+          }
+          card.style.opacity = '0';
           setTimeout(() => {
             card.style.display = 'none';
           }, 600);
