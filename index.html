@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ravindu Sankalpa | Data Science & AI Portfolio</title>
+  <title>Ravindu Sankalpa | Portfolio</title>
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -623,8 +623,8 @@
         <h3>I'm a <span class="typing-text">Data Scientist</span></h3>
       </div>
       <p>
-        Data Science undergraduate passionate about AI, Computer Vision, and Machine Learning. 
-        Building intelligent systems that solve real-world problems using cutting-edge technology.
+        Data Science undergraduate passionate about AI, Machine Learning, Deep Learning, Computer Vision and IoT. 
+        Building intelligent systems that solve real world problems using cutting edge technology.
       </p>
       <div class="btn-group">
         <a href="#contact" class="btn btn-primary">Hire Me</a>
@@ -649,17 +649,13 @@
     <h2 class="section-title">About <span>Me</span></h2>
     <div class="about-content">
       <p>
-        I am a Data Science undergraduate with a strong passion for Artificial Intelligence and Computer Vision. 
-        My journey in tech is driven by curiosity and the desire to create intelligent systems that make a difference.
+        I'm a graduate with a BSc (Hons) in Data Science from SLTC Research University, and I dive deep into the world of intelligent systems and machine learning every day 🤖. My journey is fueled by a strong curiosity for AI, ML, DL, Computer Vision, and IoT, and I thrive on solving real-world problems through innovative tech solutions 🚀.
       </p>
       <p>
-        With expertise in Python, TensorFlow, and OpenCV, I specialize in developing AI-powered solutions 
-        for real-world challenges. From gesture recognition systems to driver safety applications, 
-        I thrive on transforming complex problems into elegant, functional solutions.
+        With hands-on experience working on industrial and academic projects, I specialize in developing AI-driven systems that integrate intelligent models with real-world hardware. From designing and training models to deploying real-time detection systems, I've built a solid foundation in the entire machine learning lifecycle. Whether it's optimizing algorithms, experimenting with new tools, or applying data analysis techniques to support effective decision-making, I'm constantly pushing the boundaries of what's possible.
       </p>
       <p>
-        When I'm not coding, I'm exploring the latest trends in AI, contributing to open-source projects, 
-        and constantly learning to stay at the forefront of technology.
+        I'm a highly motivated and adaptable professional, eager to collaborate with industry experts, gain deeper exposure, and contribute to innovative, impact-driven projects that bridge artificial intelligence with practical applications. When I'm not coding, I'm exploring the latest advancements in the AI space, contributing to open-source projects, and constantly learning to stay at the forefront of technology.
       </p>
     </div>
   </section>
@@ -794,14 +790,11 @@
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
   <footer>
     <p>&copy; 2026 <span>Ravindu Sankalpa</span>. All Rights Reserved. | Built with passion for AI & Technology</p>
   </footer>
 
-  <!-- ========== JAVASCRIPT ========== -->
   <script>
-    // ========== NAVBAR SCROLL EFFECT ==========
     window.addEventListener('scroll', () => {
       const navbar = document.querySelector('.navbar');
       if (window.scrollY > 50) {
@@ -811,7 +804,6 @@
       }
     });
 
-    // ========== MOBILE MENU TOGGLE ==========
     const menuIcon = document.querySelector('.menu-icon');
     const navLinks = document.querySelector('.nav-links');
 
@@ -822,7 +814,6 @@
       icon.classList.toggle('fa-times');
     });
 
-    // Close menu when clicking on a link
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('active');
@@ -832,7 +823,6 @@
       });
     });
 
-    // ========== ACTIVE LINK ON SCROLL ==========
     const sections = document.querySelectorAll('section');
     const navLinksAll = document.querySelectorAll('.nav-links a');
 
@@ -854,14 +844,15 @@
       });
     });
 
-    // ========== TYPING ANIMATION ==========
     const typingText = document.querySelector('.typing-text');
     const roles = [
       'Data Scientist',
       'AI Engineer',
       'ML Developer',
+      'DL Developer',
       'Computer Vision Expert',
-      'Python Developer'
+      'IoT Solutions Architect',
+      'Business Intelligence Analyst'
     ];
     let roleIndex = 0;
     let charIndex = 0;
@@ -881,21 +872,19 @@
       let typeSpeed = isDeleting ? 50 : 100;
 
       if (!isDeleting && charIndex === currentRole.length) {
-        typeSpeed = 2000; // Pause at end
+        typeSpeed = 2000; 
         isDeleting = true;
       } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         roleIndex = (roleIndex + 1) % roles.length;
-        typeSpeed = 500; // Pause before next word
+        typeSpeed = 500; 
       }
 
       setTimeout(typeRole, typeSpeed);
     }
 
-    // Start typing animation
     typeRole();
 
-    // ========== SMOOTH SCROLL ==========
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
