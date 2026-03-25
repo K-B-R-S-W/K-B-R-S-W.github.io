@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="12" fill="#1C3C3C"/>
+  <path fill="#1DB954" d="M20 50 Q20 35 32 35 L45 35 Q52 35 52 42 Q52 50 45 50 L35 50 Q30 50 30 55 Q30 60 35 60 L55 60 Q68 60 68 50 Q68 35 55 35"/>
+  <circle cx="20" cy="50" r="6" fill="#1DB954"/>
+  <circle cx="68" cy="50" r="6" fill="#1DB954"/>
+  <text x="50" y="97" fill="#1DB954" font-size="9" font-family="Arial" font-weight="bold" text-anchor="middle">LangChain</text>
+</svg>
