@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="12" fill="#E7352C"/>
+  <rect x="22" y="28" width="56" height="44" rx="4" fill="white"/>
+  <rect x="28" y="34" width="44" height="32" rx="2" fill="#333"/>
+  <g fill="#E7352C">
+    <rect x="15" y="35" width="7" height="4" rx="1"/>
+    <rect x="15" y="44" width="7" height="4" rx="1"/>
+    <rect x="15" y="53" width="7" height="4" rx="1"/>
+    <rect x="78" y="35" width="7" height="4" rx="1"/>
+    <rect x="78" y="44" width="7" height="4" rx="1"/>
+    <rect x="78" y="53" width="7" height="4" rx="1"/>
+  </g>
+  <text x="50" y="55" fill="white" font-size="10" font-family="Arial" font-weight="bold" text-anchor="middle">ESP32</text>
+  <text x="50" y="97" fill="white" font-size="10" font-family="Arial" font-weight="bold" text-anchor="middle">Espressif</text>
+</svg>
