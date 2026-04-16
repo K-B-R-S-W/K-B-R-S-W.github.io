@@ -113,8 +113,9 @@ async def read_background_documents():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read background documents: {str(e)}")
 
-OPEN_ROUTER_URL = os.getenv('OPEN_ROUTER_URL')
-OPEN_ROUTER_API = os.getenv('OPEN_ROUTER_API')
+GROQ_URL = os.getenv('GROQ_URL', 'https://api.groq.com/openai/v1/chat/completions')
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+GROQ_MODEL = os.getenv('GROQ_MODEL', 'llama-3.1-8b-instant')
 
 def build_system_prompt(visitor_name: str | None, background_info: str = "") -> str:
     background_context = ""
@@ -136,6 +137,9 @@ Think of it like texting a mate, not writing a formal reply.
 A few things to keep in mind:
 - Always say something in response to the visitor's message, even if it's just a casual acknowledgment. Never leave them hanging.
 - Talk in first person - "I", "me", "my" - like you're actually me
+- Identity rule: when introducing yourself, always say exactly "I'm Ravindu Sankalpa."
+- Do not introduce yourself as "Raviya". If needed, mention it only as a nickname: "Some friends call me Raviya."
+- Avoid repeating name/identity statements in the same reply
 - Keep the tone casual and warm, like catching up with someone you know
 - Keep answers concise and clear (usually 3-7 lines)
 - For multi-item answers, use short numbered or bullet points with line breaks
@@ -187,7 +191,7 @@ async def start_session(payload: StartSession):
             print(f"Warning: Could not load background info: {str(e)}")
     session["background_info"] = background_info
     system_prompt = build_system_prompt(None, background_info)
-    greeting = await call_llm_openrouter(
+    greeting = await call_llm_groq(
         system_prompt=system_prompt,
         history=[],
         user_message=(
@@ -209,7 +213,7 @@ async def generate_answers(payload: ChatMessage):
             session["visitor_name"] = detected_name
     session["history"].append({"role": "user", "content": payload.message})
     system_prompt = build_system_prompt(visitor_name=session["visitor_name"], background_info=session["background_info"])
-    response = await call_llm_openrouter(
+    response = await call_llm_groq(
         system_prompt=system_prompt,
         history=session["history"][:-1],
         user_message=payload.message
@@ -226,24 +230,23 @@ async def end_session(session_id: str):
     raise HTTPException(status_code=404, detail="Session not found")
 
 
-async def call_llm_openrouter(system_prompt: str, history: list, user_message: str) -> str:
+async def call_llm_groq(system_prompt: str, history: list, user_message: str) -> str:
     headers = {
-        "Authorization": f"Bearer {OPEN_ROUTER_API}",
+        "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
     messages = [{"role": "system", "content": system_prompt}]
     messages.extend(history)
     messages.append({"role": "user", "content": user_message})
     payload = {
-        "model": "arcee-ai/trinity-large-preview:free",
+        "model": GROQ_MODEL,
         "messages": messages,
-        "reasoning": {"enabled": True},
         "stream": False,
         "max_tokens": 700,
         "temperature": 0.7
     }
     async with httpx.AsyncClient(timeout=120) as client:
-        response = await client.post(OPEN_ROUTER_URL, headers=headers, json=payload)
+        response = await client.post(GROQ_URL, headers=headers, json=payload)
         response.raise_for_status()
         return response.json()["choices"][0]["message"]["content"]
 

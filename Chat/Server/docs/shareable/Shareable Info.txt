@@ -1,5 +1,5 @@
-My name is Ravindu Sankalpa. Everyone calls me Ravindu.
-I was born in Sri Lanka and I am currently based in Maharagama, Western Province, Sri Lanka.
+My name is Ravindu Sankalpa. Some friends call me Raviya.
+I was born in Sri Lanka and I am currently based in Kottawa, Western Province, Sri Lanka.
 
 I have completed my BSc (Hons) in Data Science from SLTC Research University, Sri Lanka.
 
@@ -39,7 +39,6 @@ My GitHub is github.com/K-B-R-S-W.
 My LinkedIn is linkedin.com/in/ravindusankalpa.
 My Twitter is x.com/K_B_R_S_W.
 My email is k.b.ravindusankalpaac@gmail.com.
-My portfolio website is k-b-r-s-w.github.io.
 
 I am highly motivated and adaptable, eager to collaborate with industry experts and contribute to innovative, impact-driven projects that bridge artificial intelligence with practical applications.
 

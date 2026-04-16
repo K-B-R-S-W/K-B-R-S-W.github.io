@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 m-3">
+    <div class="p-4 m-3 context-detail">
         <div class="row">
             <div class="col-12">
                 <h3 class="fw-bold pb-3">🤟 SignSync AI</h3>
@@ -29,3 +29,26 @@
         </div>
     </div>
 </template>
+
+<style scoped>
+.context-detail p {
+    line-height: 1.65;
+    margin-bottom: 14px;
+}
+
+.context-detail ul {
+    margin: 8px 0 14px;
+    padding-left: 1.2rem;
+    list-style: disc;
+}
+
+.context-detail li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.section-title {
+    display: inline-block;
+    margin-bottom: 2px;
+}
+</style>

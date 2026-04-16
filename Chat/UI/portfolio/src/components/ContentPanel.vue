@@ -2,6 +2,10 @@
 import { ref } from 'vue'
 import ContextCard from './cards/ContextCard.vue'
 
+const props = defineProps({
+    isDarkMode: { type: Boolean, default: true }
+})
+
 const cards = ref([
     { id: 1,  title: 'Ravindu Sankalpa',               subtitle: 'AI & Data Science Engineer — building intelligent systems', expanded: true,  type: 'intro',             unlocked: true  },
     { id: 2,  title: 'BSc Data Science — SLTC',         subtitle: 'BSc (Hons) in Data Science from SLTC Research University',  expanded: false, type: 'edu_bsc',           unlocked: false },
@@ -15,6 +19,9 @@ const cards = ref([
     { id: 10, title: 'k-b-r-s-w.github.io',            subtitle: 'Personal portfolio — hub of projects, skills and identity',  expanded: false, type: 'project_portfolio', unlocked: false },
     { id: 11, title: 'AI Agents & LLMs',                subtitle: 'Exploring autonomous agents, LangChain and LangGraph',       expanded: false, type: 'frontier_agents',   unlocked: false },
     { id: 12, title: 'IoT & Embedded AI',               subtitle: 'Bridging AI models with real-world hardware',                expanded: false, type: 'frontier_iot',      unlocked: false },
+    { id: 13, title: 'MLOps & Model Serving',           subtitle: 'MLflow experiments, model versioning, deployment workflows', expanded: false, type: 'skill_mlops',       unlocked: false },
+    { id: 14, title: 'NLP & LLM Applications',          subtitle: 'Prompting, retrieval workflows and conversational AI design', expanded: false, type: 'skill_nlp',         unlocked: false },
+    { id: 15, title: 'Cloud & Deployment',              subtitle: 'Vercel, API hosting, CI/CD and production deployment practices', expanded: false, type: 'skill_cloud',      unlocked: false },
 ])
 
 let nextId = cards.value.length + 1
@@ -52,7 +59,7 @@ defineExpose({ unlockCard })
 </script>
 
 <template>
-    <div class="container-fluid bg-cream d-flex flex-column h-100 overflow-y-auto" style="scrollbar-width: none;">
+    <div class="container-fluid d-flex flex-column h-100 overflow-y-auto content-shell" :class="props.isDarkMode ? 'theme-dark' : 'theme-light'" style="scrollbar-width: none;">
         <div class="col-12 d-flex flex-column h-100">
             <div class="row p-4 border-bottom flex-shrink-0">
                 <div class="col-6">
@@ -69,7 +76,7 @@ defineExpose({ unlockCard })
                 <TransitionGroup name="card-reveal" tag="div">
                     <template v-for="card in cards" :key="card.id">
                         <div v-if="card.unlocked" class="card-wrapper" :class="{ 'card-just-unlocked': card.justUnlocked }">
-                            <ContextCard :card="card" @toggle="toggleCard(card.id)" />
+                            <ContextCard :card="card" :is-dark-mode="props.isDarkMode" @toggle="toggleCard(card.id)" />
                         </div>
                     </template>
                 </TransitionGroup>
@@ -79,6 +86,32 @@ defineExpose({ unlockCard })
 </template>
 
 <style>
+.content-shell.theme-light {
+    background: #f5f3ef;
+    color: #111827;
+}
+
+.content-shell.theme-dark {
+    background: #111827;
+    color: #e5e7eb;
+}
+
+.content-shell.theme-dark .border-bottom {
+    border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+.content-shell.theme-dark .text-secondary {
+    color: #9ca3af !important;
+}
+
+.content-shell.theme-dark .bg-primary-subtle {
+    background-color: rgba(45, 91, 227, 0.18) !important;
+}
+
+.content-shell.theme-dark .border-primary {
+    border-color: rgba(96, 165, 250, 0.45) !important;
+}
+
 .card-reveal-enter-active { transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .card-reveal-enter-from { opacity: 0; transform: translateY(-12px) scale(0.97); }
 .card-just-unlocked { animation: unlockPulse 0.6s ease-out; }

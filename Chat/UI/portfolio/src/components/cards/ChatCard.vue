@@ -4,7 +4,8 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 const props = defineProps({
     user: String,
     time: Number,   // timestamp (milliseconds)
-    convo: String
+    convo: String,
+    isDarkMode: { type: Boolean, default: true }
 })
 
 const now = ref(Date.now())
@@ -39,11 +40,13 @@ const isUserMessage = computed(() => props.user === 'You')
         <div class="chat-bubble" :class="[
             isUserMessage
                 ? 'bg-black text-white rounded-start rounded-bottom border border-dark-subtle'
-                : 'bg-light text-dark rounded-end rounded-bottom border border-secondary-subtle'
+                : (props.isDarkMode
+                    ? 'bg-slate-800 text-slate-100 rounded-end rounded-bottom border border-slate-600'
+                    : 'bg-light text-dark rounded-end rounded-bottom border border-secondary-subtle')
         ]">
-            <div class="d-flex small text-secondary mb-1" :class="[
+            <div class="d-flex small mb-1" :class="[
                 isUserMessage ? 'justify-content-end' : 'justify-content-start'
-            ]">
+            ]" :style="{ color: isUserMessage ? '#cbd5e1' : (props.isDarkMode ? '#94a3b8' : '#6b7280') }">
                 {{ user }} • {{ timeAgo }}
             </div>
 

@@ -75,6 +75,21 @@ export const SKILL_MAP = [
         card: null,
         keywords: ['esp32', 'arduino', 'iot', 'embedded', 'hardware', 'microcontroller', 'sensor', 'raspberry'],
     },
+    {
+        nodeId: 'nlp',
+        card: { type: 'skill_nlp', title: 'NLP & LLM Applications', subtitle: 'Prompting, retrieval workflows and conversational AI design' },
+        keywords: ['nlp', 'natural language', 'prompt engineering', 'llm app', 'conversation ai', 'retrieval', 'rag', 'chatbot design'],
+    },
+    {
+        nodeId: 'mlops',
+        card: { type: 'skill_mlops', title: 'MLOps & Model Serving', subtitle: 'MLflow experiments, model versioning, deployment workflows' },
+        keywords: ['mlops', 'mlflow', 'model serving', 'model registry', 'experiment tracking', 'pipeline', 'model deployment'],
+    },
+    {
+        nodeId: 'cloud',
+        card: { type: 'skill_cloud', title: 'Cloud & Deployment', subtitle: 'Vercel, API hosting, CI/CD and production deployment practices' },
+        keywords: ['vercel', 'cloud', 'deployment', 'ci/cd', 'cicd', 'hosting', 'production', 'devops deployment'],
+    },
 
     // ── PROJECTS ──────────────────────────────────────────────────────────
     {

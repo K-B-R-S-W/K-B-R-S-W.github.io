@@ -1,5 +1,5 @@
 <template>
-    <div class="skill-tree-container bg-cream">
+    <div class="skill-tree-container" :class="props.isDarkMode ? 'theme-dark' : 'theme-light'">
         <div class="tree-header">
             <div class="tree-header-label">What You Know</div>
             <div class="tree-header-row">
@@ -16,7 +16,7 @@
             @touchmove.prevent="onTouchMove" @touchend="onTouchEnd"
             :style="{ cursor: isPanning ? 'grabbing' : 'grab' }">
 
-            <div class="zoom-controls">
+            <div class="zoom-controls" :class="{ 'zoom-controls--disabled': activeTooltip }">
                 <button class="zoom-btn" @click.stop="zoomIn" title="Zoom in">+</button>
                 <button class="zoom-btn zoom-reset" @click.stop="resetZoom" title="Reset view">⊙</button>
                 <button class="zoom-btn" @click.stop="zoomOut" title="Zoom out">−</button>
@@ -85,7 +85,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 
-const props = defineProps({ unlockedIds: { type: Array, default: () => ['center'] } })
+const props = defineProps({
+    unlockedIds: { type: Array, default: () => ['center'] },
+    isDarkMode: { type: Boolean, default: true }
+})
 const emit = defineEmits(['node-unlocked', 'node-clicked'])
 
 const SVG_W = 1100
@@ -111,6 +114,9 @@ const nodes = ref([
     { id: 'databases', label: 'Databases', icon: '🗄️', description: 'MySQL, MongoDB, Firebase. Structured and unstructured data management.', x: 920, y: 290, zone: 'tech', unlocked: false, justUnlocked: false },
     { id: 'devops', label: 'DevOps', icon: '🔧', description: 'Git, GitHub, Docker, Postman, Anaconda, Jupyter. Full development workflow tools.', x: 920, y: 400, zone: 'tech', unlocked: false, justUnlocked: false },
     { id: 'iot', label: 'IoT', icon: '📡', description: 'ESP32, Arduino. Bridging AI models with real-world hardware and sensors.', x: 880, y: 510, zone: 'tech', unlocked: false, justUnlocked: false },
+    { id: 'nlp', label: 'NLP / LLM', icon: '📝', description: 'Prompt engineering, conversational AI, semantic retrieval and LLM application design.', x: 760, y: 630, zone: 'tech', unlocked: false, justUnlocked: false },
+    { id: 'mlops', label: 'MLOps', icon: '🧪', description: 'Experiment tracking with MLflow, model lifecycle management and reliable AI deployment workflows.', x: 980, y: 620, zone: 'tech', unlocked: false, justUnlocked: false },
+    { id: 'cloud', label: 'Cloud Deploy', icon: '☁️', description: 'Deploying web apps and APIs with Vercel, CI/CD, and production readiness practices.', x: 980, y: 740, zone: 'tech', unlocked: false, justUnlocked: false },
 
     // PROJECTS
     { id: 'proj-smartfan', label: 'Smart Fan', icon: '🌀', description: 'Gesture-based fan control using TensorFlow, OpenCV and ESP32. Real-time hand gesture recognition integrated with hardware.', x: 180, y: 160, zone: 'project', unlocked: false, justUnlocked: false },
@@ -143,6 +149,10 @@ const connections = computed(() => {
         { id: 'bk-db', from: 'backend', to: 'databases' },
         { id: 'bk-dv', from: 'backend', to: 'devops' },
         { id: 'dv-iot', from: 'devops', to: 'iot' },
+        { id: 'bk-nlp', from: 'backend', to: 'nlp' },
+        { id: 'dv-mlops', from: 'devops', to: 'mlops' },
+        { id: 'mlops-cloud', from: 'mlops', to: 'cloud' },
+        { id: 'nlp-ag', from: 'nlp', to: 'ai-agents' },
         { id: 'ai-sf', from: 'ai-ml', to: 'proj-smartfan' },
         { id: 'ai-dr', from: 'ai-ml', to: 'proj-driver' },
         { id: 'cv-ss', from: 'computer-vision', to: 'proj-signsync' },
@@ -290,6 +300,7 @@ function onNodeClick(node) {
 .tree-wrap { flex: 1; overflow: hidden; padding: 0; position: relative; display: flex; align-items: center; justify-content: center; user-select: none; }
 .tree-svg { width: 100%; max-width: 310px; height: auto; overflow: visible; transition: transform 0.05s linear; will-change: transform; }
 .zoom-controls { position: absolute; bottom: 14px; right: 14px; display: flex; flex-direction: column; gap: 4px; z-index: 20; }
+.zoom-controls--disabled { opacity: 0.35; pointer-events: none; }
 .zoom-btn { width: 28px; height: 28px; background: #ffffff; border: 1px solid #e2dfd8; color: #444; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.08); transition: background 0.15s, border-color 0.15s; padding: 0; border-radius: 4px; }
 .zoom-btn:hover { background: #f5f3ef; border-color: #6c7fdd; color: #2d5be3; }
 .zoom-reset { font-size: 13px; }
@@ -307,14 +318,81 @@ function onNodeClick(node) {
 .tree-legend { padding: 12px 20px; border-top: 1px solid #e2dfd8; display: flex; gap: 16px; flex-shrink: 0; flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 9px; color: #9a9690; letter-spacing: 0.06em; }
 .legend-hex { width: 12px; height: 12px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); flex-shrink: 0; }
-.node-tooltip { position: absolute; bottom: 64px; left: 12px; right: 12px; background: #ffffff; border: 1px solid #e2dfd8; padding: 14px; display: flex; gap: 12px; align-items: flex-start; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 10; }
+.node-tooltip { position: absolute; bottom: 14px; left: 12px; right: 52px; background: #ffffff; border: 1px solid #e2dfd8; padding: 14px 42px 14px 14px; display: flex; gap: 12px; align-items: flex-start; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 40; max-height: min(42vh, 220px); overflow: hidden; }
 .tooltip-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-.tooltip-body { flex: 1; min-width: 0; }
+.tooltip-body { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(min(42vh, 220px) - 28px); padding-right: 6px; }
 .tooltip-name { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
 .tooltip-desc { font-size: 12px; color: #666; line-height: 1.55; }
 .tooltip-hint { font-size: 9px; color: #2d5be3; letter-spacing: 0.06em; margin-top: 6px; text-transform: uppercase; }
-.tooltip-close { background: none; border: none; color: #9a9690; cursor: pointer; font-size: 11px; padding: 0; flex-shrink: 0; line-height: 1; }
+.tooltip-close { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #f5f3ef; border: 1px solid #e2dfd8; border-radius: 6px; color: #6b7280; cursor: pointer; font-size: 12px; padding: 0; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
 .tooltip-close:hover { color: #1a1a1a; }
 .tooltip-enter-active, .tooltip-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
 .tooltip-enter-from, .tooltip-leave-to { opacity: 0; transform: translateY(6px); }
+
+.theme-light {
+    background: #f5f3ef;
+}
+
+.theme-dark {
+    background: #111827;
+}
+
+.theme-dark .tree-header,
+.theme-dark .tree-legend {
+    border-color: rgba(148, 163, 184, 0.22);
+}
+
+.theme-dark .tree-header-title,
+.theme-dark .tooltip-name {
+    color: #e5e7eb;
+}
+
+.theme-dark .tree-header-label,
+.theme-dark .legend-item,
+.theme-dark .tooltip-close {
+    color: #9ca3af;
+}
+
+.theme-dark .progress-bar {
+    background: #1f2937;
+}
+
+.theme-dark .connector {
+    stroke: #334155;
+}
+
+.theme-dark .connector.active {
+    stroke: #5674d8;
+}
+
+.theme-dark .hex-label {
+    fill: #7f8aa3;
+}
+
+.theme-dark .hex-label.unlocked {
+    fill: #d1d5db;
+}
+
+.theme-dark .zoom-btn,
+.theme-dark .node-tooltip {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e5e7eb;
+}
+
+.theme-dark .tooltip-close {
+    background: #111827;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+.theme-dark .zoom-btn:hover {
+    background: #111827;
+    border-color: #5674d8;
+    color: #c7d2fe;
+}
+
+.theme-dark .tooltip-desc {
+    color: #cbd5e1;
+}
 </style>

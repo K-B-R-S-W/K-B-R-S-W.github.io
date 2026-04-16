@@ -5,6 +5,10 @@ import { detectUnlocks, getCardsForNodes } from '@/services/skillMap.js'
 import Chat from './cards/ChatCard.vue'
 import SendBtn from './icons/SendBtn.vue'
 
+const props = defineProps({
+    isDarkMode: { type: Boolean, default: true }
+})
+
 // ─── props / emits ──────────────────────────────────────────────────────────
 // Parent listens for `skills-unlocked` to drive SkillTree + ContentPanel
 const emit = defineEmits(['skills-unlocked'])
@@ -79,7 +83,7 @@ async function updateSession() {
 </script>
 
 <template>
-    <div class="container-fluid d-flex flex-column h-100 bg-cream">
+    <div class="container-fluid d-flex flex-column h-100 chat-shell" :class="props.isDarkMode ? 'theme-dark' : 'theme-light'">
         <div class="col-12 d-flex flex-column h-100">
 
             <!-- Header -->
@@ -94,7 +98,7 @@ async function updateSession() {
             <div ref="scrollContainer" class="row border-bottom overflow-y-auto flex-grow-1">
                 <div class="col-12">
                     <div v-for="msg in conversations" :key="msg.time">
-                        <Chat :user="msg.user" :time="msg.time" :convo="msg.convo" />
+                        <Chat :user="msg.user" :time="msg.time" :convo="msg.convo" :is-dark-mode="props.isDarkMode" />
                     </div>
 
                     <!-- Typing indicator -->
@@ -109,19 +113,19 @@ async function updateSession() {
             </div>
 
             <!-- Input -->
-            <div class="row align-items-center py-2 flex-shrink-0">
-                <div class="col-10">
+            <div class="chat-input-wrap flex-shrink-0">
+                <div class="chat-input-field-wrap">
                     <input
                         type="text"
                         id="convo"
                         placeholder="Ask me anything..."
                         v-model="userInput"
                         @keydown.enter.prevent="updateSession"
-                        class="p-2 w-100 border border-light-subtle bg-light rounded-2"
+                        class="chat-input-field"
                     />
                 </div>
-                <div class="col-2 d-flex justify-content-center">
-                    <button class="bg-black rounded p-2" @click="updateSession">
+                <div class="chat-send-wrap">
+                    <button class="chat-send-btn" @click="updateSession" aria-label="Send message" title="Send">
                         <SendBtn />
                     </button>
                 </div>
@@ -132,6 +136,76 @@ async function updateSession() {
 </template>
 
 <style>
+.chat-shell.theme-dark {
+    background: #111827;
+    color: #e5e7eb;
+}
+
+.chat-shell.theme-light {
+    background: #f5f3ef;
+    color: #111827;
+}
+
+.chat-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.chat-input-field-wrap {
+    flex: 1;
+}
+
+.chat-input-field {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.chat-shell.theme-light .chat-input-field {
+    background: #ffffff;
+    color: #111827;
+}
+
+.chat-shell.theme-dark .chat-input-field {
+    background: #0b1220;
+    color: #e5e7eb;
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+.chat-input-field:focus {
+    border-color: #2d5be3;
+    box-shadow: 0 0 0 3px rgba(45, 91, 227, 0.15);
+}
+
+.chat-send-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-send-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: #111827;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-send-btn:hover {
+    background: #1f2937;
+}
+
 .typing-indicator {
     display: flex;
     align-items: center;

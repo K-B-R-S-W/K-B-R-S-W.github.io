@@ -1,16 +1,28 @@
 <template>
-    <div class="container-fluid">
-        <div class="d-flex w-100 py-3 px-1 overflow-none">
+    <div class="container-fluid landing-shell" :class="isDarkMode ? 'theme-dark' : 'theme-light'">
+        <div class="d-flex w-100 py-3 px-1 overflow-none top-strip">
             <div class="row w-100">
                 <div class="col-8 justify-content-start d-flex align-items-center fs-4 fw-bolder">
                     Ravindu.dev
                 </div>
-                <div class="col-4 justify-content-end d-flex align-items-center gap-4 text-secondary"
+                <div class="col-4 justify-content-end d-flex align-items-center gap-4 top-meta"
                     style="font-size: .8em;">
                     <span>Learn more about me</span>
                     <span class="d-flex align-items-center gap-2">
                         <div class="status-pip"></div>
                         Online
+                    </span>
+                    <span class="d-flex align-items-center gap-2">
+                        Mode
+                        <button
+                            class="mode-toggle"
+                            :class="isDarkMode ? 'is-dark' : 'is-light'"
+                            @click="isDarkMode = !isDarkMode"
+                            :aria-label="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+                            :title="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+                        >
+                            <span class="mode-toggle-thumb"></span>
+                        </button>
                     </span>
                 </div>
             </div>
@@ -18,14 +30,14 @@
 
         <div ref="splitContainer" class="d-flex w-100 px-1 overflow-hidden" style="height: calc(100vh - 80px);">
             <div id="left-pane" class="border overflow-hidden">
-                <ContentPanel ref="contentPanelRef" />
+                <ContentPanel ref="contentPanelRef" :is-dark-mode="isDarkMode" />
             </div>
             <div id="right-pane" class="border d-flex flex-column overflow-hidden">
                 <div id="top-pane" class="overflow-hidden">
-                    <SkillTree ref="skillTreeRef" />
+                    <SkillTree ref="skillTreeRef" :is-dark-mode="isDarkMode" />
                 </div>
                 <div id="bottom-pane" class="overflow-hidden">
-                    <LiveChat @skills-unlocked="onSkillsUnlocked" />
+                    <LiveChat :is-dark-mode="isDarkMode" @skills-unlocked="onSkillsUnlocked" />
                 </div>
             </div>
         </div>
@@ -42,6 +54,7 @@ import SkillTree from '@/components/SkillTree.vue'
 // ─── split panes ─────────────────────────────────────────────────────────────
 const splitCol = ref(null)
 const splitRow = ref(null)
+const isDarkMode = ref(false)
 
 onMounted(() => {
     splitCol.value = Split(
@@ -90,10 +103,86 @@ function onSkillsUnlocked({ nodeIds, cards }) {
 </script>
 
 <style scoped>
+.landing-shell {
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.theme-dark {
+    background: #0f111a;
+    color: #e5e7eb;
+}
+
+.theme-light {
+    background: #f8f9fb;
+    color: #1f2937;
+}
+
+.top-strip {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.top-meta {
+    color: #6b7280;
+}
+
+.theme-dark .top-meta {
+    color: #9ca3af;
+}
+
+.mode-toggle {
+    position: relative;
+    width: 42px;
+    height: 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    background: #dbe2ea;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.mode-toggle-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    transform: translateX(2px);
+    transition: transform 0.2s ease;
+}
+
+.mode-toggle.is-dark {
+    background: #2d5be3;
+}
+
+.mode-toggle.is-dark .mode-toggle-thumb {
+    transform: translateX(22px);
+}
+
+.theme-light #left-pane,
+.theme-light #right-pane,
+.theme-light #top-pane,
+.theme-light #bottom-pane {
+    background: #ffffff;
+}
+
+.theme-dark #left-pane,
+.theme-dark #right-pane,
+.theme-dark #top-pane,
+.theme-dark #bottom-pane {
+    background: #111827;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 .gutter {
     background-color: #dee2e6;
     background-repeat: no-repeat;
     background-position: 50%;
+}
+
+.theme-dark .gutter {
+    background-color: #1f2937;
 }
 
 .gutter.gutter-horizontal {

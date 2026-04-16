@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 m-3">
+    <div class="p-4 m-3 context-detail">
         <h3 class="fw-bold pb-3">🤖 AI Agents & LLMs</h3>
         <p>My current frontier. After building CrimeGuard with LangGraph multi-agent routing, I've become deeply interested in autonomous AI agent systems and large language models.</p>
         <span class="fw-bold">What I'm exploring:</span><br>
@@ -12,3 +12,26 @@
         <p>CrimeGuard was just the beginning. Building agents that can reason, route, and act autonomously is where I'm heading next.</p>
     </div>
 </template>
+
+<style scoped>
+.context-detail p {
+    line-height: 1.65;
+    margin-bottom: 14px;
+}
+
+.context-detail ul {
+    margin: 8px 0 14px;
+    padding-left: 1.2rem;
+    list-style: disc;
+}
+
+.context-detail li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.section-title {
+    display: inline-block;
+    margin-bottom: 2px;
+}
+</style>
