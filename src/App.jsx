@@ -8,6 +8,8 @@ import Navbar from "./components/Navbar";
 import Portofolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
 import ProjectDetails from "./components/ProjectDetail";
+import ChatBot from "./components/ChatBot";
+
 const LandingPage = () => {
   return (
     <>
@@ -17,6 +19,7 @@ const LandingPage = () => {
       <About />
       <Portofolio />
       <ContactPage />
+      <ChatBot />
       <footer>
         <center>
           <hr className="my-3 border-gray-400 opacity-15 sm:mx-auto lg:my-6 text-center" />

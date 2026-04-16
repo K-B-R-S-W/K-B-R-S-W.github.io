@@ -1,0 +1,48 @@
+My name is Ravindu Sankalpa. Everyone calls me Ravindu.
+I was born in Sri Lanka and I am currently based in Maharagama, Western Province, Sri Lanka.
+
+I have completed my BSc (Hons) in Data Science from SLTC Research University, Sri Lanka.
+
+I am a Data Science graduate with a deep passion for Artificial Intelligence, Machine Learning, Deep Learning, Computer Vision, and IoT. I love building intelligent systems that solve real-world problems using cutting-edge technology.
+
+My programming languages include Python, Java, C, C++, JavaScript, HTML, CSS, R, PHP, and PowerShell.
+
+My AI and ML frameworks include TensorFlow, Keras, PyTorch, OpenCV, MediaPipe, YOLO, HRNetV2, and scikit-learn.
+
+My data tools include NumPy, Pandas, Matplotlib, Seaborn, Power BI, Excel, Snowflake, and MLflow.
+
+My backend and web tools include Flask, FastAPI, Node.js, React, and Tailwind CSS.
+
+My databases include MySQL, MongoDB, and Firebase.
+
+My DevOps and tools include Git, GitHub, GitHub Actions, GitLab, Docker, Postman, VSCode, Anaconda, Twilio, CMake, and ngrok.
+
+My IoT and embedded systems experience includes ESP32 and Arduino.
+
+My projects include:
+
+1. Smart Fan Control - A gesture-based fan control system using Computer Vision and IoT. Real-time hand gesture recognition powered by TensorFlow and OpenCV, integrated with ESP32 for hardware control.
+
+2. Driver Safety Guard - An AI-powered system to detect driver drowsiness, distraction and phone usage in real time. Uses deep learning models for facial landmark detection and behavior analysis to prevent accidents.
+
+3. SignSync AI - Real-time Sign Language Recognition with an advanced LSTM-based system for detecting full sentence sign language gestures. Built with MediaPipe Holistic (1662 landmarks), PyTorch and OpenCV.
+
+4. CrimeGuard ChatBot - A hybrid multi-agent emergency assistant for Sri Lanka. Features autonomous AI detection, automated Twilio emergency calls, LangGraph intelligent routing, MongoDB tracking with multilingual TTS and STT in English, Sinhala and Tamil.
+
+5. Blood Malignancy Diagnostic System - An AI-powered web application that uses a ResNet-50 deep learning model to classify different types of blood cells.
+
+6. Facial Landmark Detection Using PyTorch - A real-time facial landmark detection system that uses the HRNetV2 architecture. Built with PyTorch and OpenCV.
+
+7. Sri Lankan License Plate Capture System - A real-time license plate detection system specifically trained for Sri Lankan license plates using YOLOv11. Supports both real-time camera detection.
+
+My GitHub is github.com/K-B-R-S-W.
+My LinkedIn is linkedin.com/in/ravindusankalpa.
+My Twitter is x.com/K_B_R_S_W.
+My email is k.b.ravindusankalpaac@gmail.com.
+My portfolio website is k-b-r-s-w.github.io.
+
+I am highly motivated and adaptable, eager to collaborate with industry experts and contribute to innovative, impact-driven projects that bridge artificial intelligence with practical applications.
+
+I love exploring the latest advancements in AI, contributing to open source projects, and constantly learning to stay at the forefront of technology.
+
+I am interested in AI agents, LLMs, computer vision systems, and IoT integration.

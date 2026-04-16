@@ -130,22 +130,22 @@ const Home = () => {
     <section id="Home" className="bg-[#030014] overflow-hidden px-[5%] lg:px-[10%] pt-10 sm:pt-12 pb-10 sm:pb-16">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="max-w-7xl w-full mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
-            <div className="w-full lg:w-1/2 space-y-6 sm:space-y-8 text-left order-1" data-aos="fade-right" data-aos-delay="200">
+          <div className="flex flex-row items-center justify-between gap-3 sm:gap-6 lg:gap-12">
+            <div className="w-[58%] lg:w-1/2 space-y-4 sm:space-y-8 text-left order-1" data-aos="fade-right" data-aos-delay="200">
               <div className="space-y-4 sm:space-y-6">
                 <StatusBadge />
                 <MainTitle />
                 <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
-                  <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">{text}</span>
+                  <span className="text-sm sm:text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">{text}</span>
                   <span className="w-[3px] h-6 ml-1 animate-blink bg-gradient-to-t from-[#6366f1] to-[#a855f7]"></span>
                 </div>
-                <p className="text-base md:text-lg text-gray-400 max-w-xl leading-relaxed font-light" data-aos="fade-up" data-aos-delay="1000">
+                <p className="text-xs sm:text-base md:text-lg text-gray-400 max-w-xl leading-relaxed font-light" data-aos="fade-up" data-aos-delay="1000">
                   Data Science graduate passionate about AI, Machine Learning, Deep Learning, Computer Vision and IoT. Building intelligent systems that solve real world problems using cutting edge technology.
                 </p>
                 <div className="flex flex-wrap gap-3 justify-start" data-aos="fade-up" data-aos-delay="1200">
                   {TECH_STACK.map((tech, index) => (<TechStack key={index} tech={tech} />))}
                 </div>
-                <div className="flex flex-row gap-3 w-full justify-start" data-aos="fade-up" data-aos-delay="1400">
+                <div className="hidden sm:flex flex-row gap-3 w-full justify-start" data-aos="fade-up" data-aos-delay="1400">
                   <CTAButton href="#Portofolio" text="Projects" icon={ExternalLink} />
                   <CTAButton href="#Contact" text="Contact" icon={Mail} />
                 </div>
@@ -157,13 +157,13 @@ const Home = () => {
 
             {/* Right Column - AI GIF */}
             <div
-              className="w-full lg:w-1/2 flex items-center justify-center order-2"
+              className="w-[42%] lg:w-1/2 flex items-center justify-center lg:justify-end order-2"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
               data-aos="fade-left"
               data-aos-delay="600"
             >
-              <div className="relative group">
+              <div className="relative group w-full max-w-[180px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
                 {/* Glow ring behind the GIF */}
                 <div className={`absolute -inset-4 bg-gradient-to-r from-[#6366f1]/30 to-[#a855f7]/30 rounded-3xl blur-2xl transition-all duration-700 ${isHovering ? "opacity-80 scale-105" : "opacity-40 scale-100"}`}></div>
 
@@ -175,7 +175,7 @@ const Home = () => {
                   <img
                     src="/AI.gif"
                     alt="AI Animation"
-                    className={`w-[320px] sm:w-[400px] lg:w-[460px] xl:w-[500px] h-auto object-cover transition-all duration-700 ${isHovering ? "scale-105" : "scale-100"}`}
+                    className={`w-full lg:w-[460px] xl:w-[500px] h-auto object-cover transition-all duration-700 ${isHovering ? "scale-105" : "scale-100"}`}
                   />
                   {/* Subtle overlay shimmer on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-tr from-[#6366f1]/10 via-transparent to-[#a855f7]/10 transition-opacity duration-700 ${isHovering ? "opacity-100" : "opacity-0"}`}></div>
