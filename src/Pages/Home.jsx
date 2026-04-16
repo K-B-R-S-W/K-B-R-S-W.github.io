@@ -163,7 +163,7 @@ const Home = () => {
               data-aos="fade-left"
               data-aos-delay="600"
             >
-              <div className="relative group w-full max-w-[180px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
+              <div className="relative group w-full max-w-[180px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-[460px] xl:max-w-[500px] mx-auto lg:mx-0">
                 {/* Glow ring behind the GIF */}
                 <div className={`absolute -inset-4 bg-gradient-to-r from-[#6366f1]/30 to-[#a855f7]/30 rounded-3xl blur-2xl transition-all duration-700 ${isHovering ? "opacity-80 scale-105" : "opacity-40 scale-100"}`}></div>
 
@@ -175,7 +175,7 @@ const Home = () => {
                   <img
                     src="/AI.gif"
                     alt="AI Animation"
-                    className={`w-full lg:w-[460px] xl:w-[500px] h-auto object-cover transition-all duration-700 ${isHovering ? "scale-105" : "scale-100"}`}
+                    className={`w-full h-auto object-cover transition-all duration-700 ${isHovering ? "scale-105" : "scale-100"}`}
                   />
                   {/* Subtle overlay shimmer on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-tr from-[#6366f1]/10 via-transparent to-[#a855f7]/10 transition-opacity duration-700 ${isHovering ? "opacity-100" : "opacity-0"}`}></div>
