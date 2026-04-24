@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <!-- ── DESKTOP layout (Split.js panes) ── -->
+        <!-- ══ DESKTOP layout — Split.js panes, completely untouched ══ -->
         <div
             v-if="!isMobile"
             ref="splitContainer"
@@ -47,21 +47,22 @@
             </div>
         </div>
 
-        <!-- ── MOBILE layout (simple CSS grid, no Split.js) ── -->
+        <!-- ══ MOBILE layout — simple CSS grid, no Split.js ══ -->
         <div
             v-else
-            class="w-100 px-1 mobile-layout"
+            class="mobile-workspace"
         >
-            <div class="mobile-pane border overflow-hidden mobile-context">
+            <div class="mobile-cell mobile-cell--context border overflow-hidden">
                 <ContentPanel ref="contentPanelRef" :is-dark-mode="isDarkMode" />
             </div>
-            <div class="mobile-pane border overflow-hidden mobile-skilltree">
+            <div class="mobile-cell mobile-cell--skills border overflow-hidden">
                 <SkillTree ref="skillTreeRef" :is-dark-mode="isDarkMode" />
             </div>
-            <div class="mobile-pane border overflow-hidden mobile-chat">
+            <div class="mobile-cell mobile-cell--chat border overflow-hidden">
                 <LiveChat :is-dark-mode="isDarkMode" @skills-unlocked="onSkillsUnlocked" />
             </div>
         </div>
+
     </div>
 </template>
 
@@ -72,7 +73,7 @@ import ContentPanel from '@/components/ContentPanel.vue'
 import LiveChat from '@/components/LiveChat.vue'
 import SkillTree from '@/components/SkillTree.vue'
 
-// ─── split panes ─────────────────────────────────────────────────────────────
+// ─── state ───────────────────────────────────────────────────────────────────
 const splitCol = ref(null)
 const splitRow = ref(null)
 const isDarkMode = ref(false)
@@ -80,6 +81,7 @@ const isMobile = ref(false)
 
 const MOBILE_BREAKPOINT = 992
 
+// ─── split helpers ────────────────────────────────────────────────────────────
 function destroySplits() {
     splitCol.value?.destroy()
     splitRow.value?.destroy()
@@ -116,19 +118,20 @@ function syncLayoutMode() {
     const wasMobile = isMobile.value
     isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
 
-    // switching desktop -> mobile: destroy splits
     if (!wasMobile && isMobile.value) {
+        // desktop → mobile: destroy splits (v-if removes desktop DOM)
         destroySplits()
     }
 
-    // switching mobile -> desktop: re-init splits after DOM mounts
     if (wasMobile && !isMobile.value) {
+        // mobile → desktop: wait for v-if to mount desktop DOM then init
         setTimeout(initDesktopSplits, 50)
     }
 }
 
 onMounted(() => {
     syncLayoutMode()
+    if (!isMobile.value) initDesktopSplits()
     window.addEventListener('resize', syncLayoutMode)
 })
 
@@ -141,14 +144,6 @@ onBeforeUnmount(() => {
 const skillTreeRef = ref(null)
 const contentPanelRef = ref(null)
 
-/**
- * Fired by LiveChat whenever the LLM reply triggers skill unlocks.
- *
- * payload = {
- *   nodeIds : string[]                        — SkillTree node IDs to unlock
- *   cards   : { type, title, subtitle }[]     — ContentPanel cards to surface
- * }
- */
 function onSkillsUnlocked({ nodeIds, cards }) {
     skillTreeRef.value?.unlockNodes(nodeIds)
     cards.forEach(cardDef => contentPanelRef.value?.unlockCard(cardDef))
@@ -213,6 +208,7 @@ function onSkillsUnlocked({ nodeIds, cards }) {
     transform: translateX(22px);
 }
 
+/* ══ DESKTOP styles (Split.js) — exactly as original ══ */
 .workspace-layout {
     display: flex;
     height: calc(100vh - 80px);
@@ -251,70 +247,59 @@ function onSkillsUnlocked({ nodeIds, cards }) {
     cursor: row-resize;
 }
 
-/* ── Mobile layout ── */
-.mobile-layout {
+/* ══ MOBILE styles — completely separate classes, zero overlap with desktop ══ */
+.mobile-workspace {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: minmax(260px, 40vh) minmax(340px, 1fr);
+    grid-template-rows: 360px 1fr;
     gap: 8px;
     height: calc(100vh - 80px);
-}
-
-.mobile-pane {
     overflow: hidden;
-    min-height: 0;
+    padding: 0 4px;
 }
 
-.mobile-context {
+.mobile-cell {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.mobile-cell--context {
     grid-column: 1;
     grid-row: 1;
 }
 
-.mobile-skilltree {
+.mobile-cell--skills {
     grid-column: 2;
     grid-row: 1;
 }
 
-.mobile-chat {
+.mobile-cell--chat {
     grid-column: 1 / span 2;
     grid-row: 2;
 }
 
-/* theme colors for mobile panes */
-.theme-light .mobile-pane {
+.theme-light .mobile-cell {
     background: #ffffff;
 }
 
-.theme-dark .mobile-pane {
+.theme-dark .mobile-cell {
     background: #111827;
     border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-/* very small screens - stack everything vertically */
+/* very small screens — stack all 3 vertically */
 @media (max-width: 480px) {
-    .mobile-layout {
+    .mobile-workspace {
         grid-template-columns: 1fr;
-        grid-template-rows: minmax(220px, 35vh) minmax(220px, 35vh) minmax(300px, 1fr);
-        height: auto;
-        min-height: calc(100vh - 80px);
+        grid-template-rows: 280px 280px 1fr;
     }
 
-    .mobile-context {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-    .mobile-skilltree {
-        grid-column: 1;
-        grid-row: 2;
-    }
-
-    .mobile-chat {
-        grid-column: 1;
-        grid-row: 3;
-    }
+    .mobile-cell--context { grid-column: 1; grid-row: 1; }
+    .mobile-cell--skills  { grid-column: 1; grid-row: 2; }
+    .mobile-cell--chat    { grid-column: 1; grid-row: 3; }
 }
 
+/* ══ Status pip ══ */
 .status-pip {
     width: 8px;
     height: 8px;
@@ -325,16 +310,7 @@ function onSkillsUnlocked({ nodeIds, cards }) {
 }
 
 @keyframes pip {
-
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.35;
-        transform: scale(0.8);
-    }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.35; transform: scale(0.8); }
 }
 </style>
