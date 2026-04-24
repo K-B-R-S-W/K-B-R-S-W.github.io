@@ -28,7 +28,12 @@
             </div>
         </div>
 
-        <div ref="splitContainer" class="d-flex w-100 px-1 overflow-hidden" style="height: calc(100vh - 80px);">
+        <!-- ── DESKTOP layout (Split.js panes) ── -->
+        <div
+            v-if="!isMobile"
+            ref="splitContainer"
+            class="w-100 px-1 overflow-hidden workspace-layout"
+        >
             <div id="left-pane" class="border overflow-hidden">
                 <ContentPanel ref="contentPanelRef" :is-dark-mode="isDarkMode" />
             </div>
@@ -39,6 +44,22 @@
                 <div id="bottom-pane" class="overflow-hidden">
                     <LiveChat :is-dark-mode="isDarkMode" @skills-unlocked="onSkillsUnlocked" />
                 </div>
+            </div>
+        </div>
+
+        <!-- ── MOBILE layout (simple CSS grid, no Split.js) ── -->
+        <div
+            v-else
+            class="w-100 px-1 mobile-layout"
+        >
+            <div class="mobile-pane border overflow-hidden mobile-context">
+                <ContentPanel ref="contentPanelRef" :is-dark-mode="isDarkMode" />
+            </div>
+            <div class="mobile-pane border overflow-hidden mobile-skilltree">
+                <SkillTree ref="skillTreeRef" :is-dark-mode="isDarkMode" />
+            </div>
+            <div class="mobile-pane border overflow-hidden mobile-chat">
+                <LiveChat :is-dark-mode="isDarkMode" @skills-unlocked="onSkillsUnlocked" />
             </div>
         </div>
     </div>
@@ -55,8 +76,20 @@ import SkillTree from '@/components/SkillTree.vue'
 const splitCol = ref(null)
 const splitRow = ref(null)
 const isDarkMode = ref(false)
+const isMobile = ref(false)
 
-onMounted(() => {
+const MOBILE_BREAKPOINT = 992
+
+function destroySplits() {
+    splitCol.value?.destroy()
+    splitRow.value?.destroy()
+    splitCol.value = null
+    splitRow.value = null
+}
+
+function initDesktopSplits() {
+    if (splitCol.value || splitRow.value) return
+
     splitCol.value = Split(
         ['#left-pane', '#right-pane'],
         {
@@ -77,11 +110,31 @@ onMounted(() => {
             direction: 'vertical',
         }
     )
+}
+
+function syncLayoutMode() {
+    const wasMobile = isMobile.value
+    isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
+
+    // switching desktop -> mobile: destroy splits
+    if (!wasMobile && isMobile.value) {
+        destroySplits()
+    }
+
+    // switching mobile -> desktop: re-init splits after DOM mounts
+    if (wasMobile && !isMobile.value) {
+        setTimeout(initDesktopSplits, 50)
+    }
+}
+
+onMounted(() => {
+    syncLayoutMode()
+    window.addEventListener('resize', syncLayoutMode)
 })
 
 onBeforeUnmount(() => {
-    splitCol.value?.destroy()
-    splitRow.value?.destroy()
+    window.removeEventListener('resize', syncLayoutMode)
+    destroySplits()
 })
 
 // ─── skill unlock wiring ──────────────────────────────────────────────────────
@@ -160,6 +213,11 @@ function onSkillsUnlocked({ nodeIds, cards }) {
     transform: translateX(22px);
 }
 
+.workspace-layout {
+    display: flex;
+    height: calc(100vh - 80px);
+}
+
 .theme-light #left-pane,
 .theme-light #right-pane,
 .theme-light #top-pane,
@@ -191,6 +249,70 @@ function onSkillsUnlocked({ nodeIds, cards }) {
 
 .gutter.gutter-vertical {
     cursor: row-resize;
+}
+
+/* ── Mobile layout ── */
+.mobile-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(260px, 40vh) minmax(340px, 1fr);
+    gap: 8px;
+    height: calc(100vh - 80px);
+}
+
+.mobile-pane {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.mobile-context {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.mobile-skilltree {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.mobile-chat {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+}
+
+/* theme colors for mobile panes */
+.theme-light .mobile-pane {
+    background: #ffffff;
+}
+
+.theme-dark .mobile-pane {
+    background: #111827;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* very small screens - stack everything vertically */
+@media (max-width: 480px) {
+    .mobile-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(220px, 35vh) minmax(220px, 35vh) minmax(300px, 1fr);
+        height: auto;
+        min-height: calc(100vh - 80px);
+    }
+
+    .mobile-context {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .mobile-skilltree {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .mobile-chat {
+        grid-column: 1;
+        grid-row: 3;
+    }
 }
 
 .status-pip {
