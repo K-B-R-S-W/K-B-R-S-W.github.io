@@ -1,0 +1,47 @@
+name: Deploy Vercel
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Chat/Server/**'
+      - 'Chat/UI/**'
+
+jobs:
+
+  deploy-server:
+    runs-on: ubuntu-latest
+    if: contains(toJSON(github.event.commits.*.modified), 'Chat/Server')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy Server to Vercel Production
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: Chat/Server
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SERVER_PROJECT_ID }}
+
+  deploy-ui:
+    runs-on: ubuntu-latest
+    if: contains(toJSON(github.event.commits.*.modified), 'Chat/UI')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy UI to Vercel Production
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: Chat/UI/portfolio
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_UI_PROJECT_ID }}
