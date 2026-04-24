@@ -10,7 +10,6 @@ import re
 import uuid
 import httpx
 
-
 load_dotenv()
 
 NAMESPACE = os.getenv('NAMESPACE')
