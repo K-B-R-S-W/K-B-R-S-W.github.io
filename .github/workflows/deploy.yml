@@ -13,10 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Check if Server files changed
         id: server-check
         run: |
-          git fetch origin main --depth=2
           CHANGED=$(git diff --name-only HEAD~1 HEAD)
           echo "Changed files: $CHANGED"
           if echo "$CHANGED" | grep -q "Chat/Server"; then
@@ -24,10 +28,6 @@ jobs:
           else
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Checkout code
-        if: steps.server-check.outputs.changed == 'true'
-        uses: actions/checkout@v4
 
       - name: Install Vercel CLI
         if: steps.server-check.outputs.changed == 'true'
@@ -45,10 +45,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Check if UI files changed
         id: ui-check
         run: |
-          git fetch origin main --depth=2
           CHANGED=$(git diff --name-only HEAD~1 HEAD)
           echo "Changed files: $CHANGED"
           if echo "$CHANGED" | grep -q "Chat/UI"; then
@@ -56,10 +60,6 @@ jobs:
           else
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Checkout code
-        if: steps.ui-check.outputs.changed == 'true'
-        uses: actions/checkout@v4
 
       - name: Install Vercel CLI
         if: steps.ui-check.outputs.changed == 'true'
