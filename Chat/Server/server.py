@@ -5,7 +5,6 @@ from pathlib import Path
 from pypdf import PdfReader  
 from docx import Document
 from pydantic import BaseModel
-
 import os
 import re
 import uuid
