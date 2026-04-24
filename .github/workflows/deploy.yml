@@ -1,4 +1,4 @@
-name: Deploy Vercel
+name: Deploy to Vercel
 
 on:
   push:
@@ -9,19 +9,32 @@ on:
       - 'Chat/UI/**'
 
 jobs:
-
   deploy-server:
     runs-on: ubuntu-latest
-    if: contains(toJSON(github.event.commits.*.modified), 'Chat/Server')
 
     steps:
+      - name: Check if Server files changed
+        id: server-check
+        run: |
+          git fetch origin main --depth=2
+          CHANGED=$(git diff --name-only HEAD~1 HEAD)
+          echo "Changed files: $CHANGED"
+          if echo "$CHANGED" | grep -q "Chat/Server"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout code
+        if: steps.server-check.outputs.changed == 'true'
         uses: actions/checkout@v4
 
       - name: Install Vercel CLI
+        if: steps.server-check.outputs.changed == 'true'
         run: npm install -g vercel
 
       - name: Deploy Server to Vercel Production
+        if: steps.server-check.outputs.changed == 'true'
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: Chat/Server
         env:
@@ -30,16 +43,30 @@ jobs:
 
   deploy-ui:
     runs-on: ubuntu-latest
-    if: contains(toJSON(github.event.commits.*.modified), 'Chat/UI')
 
     steps:
+      - name: Check if UI files changed
+        id: ui-check
+        run: |
+          git fetch origin main --depth=2
+          CHANGED=$(git diff --name-only HEAD~1 HEAD)
+          echo "Changed files: $CHANGED"
+          if echo "$CHANGED" | grep -q "Chat/UI"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout code
+        if: steps.ui-check.outputs.changed == 'true'
         uses: actions/checkout@v4
 
       - name: Install Vercel CLI
+        if: steps.ui-check.outputs.changed == 'true'
         run: npm install -g vercel
 
       - name: Deploy UI to Vercel Production
+        if: steps.ui-check.outputs.changed == 'true'
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: Chat/UI/portfolio
         env:
