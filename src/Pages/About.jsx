@@ -166,7 +166,7 @@ const AboutPage = () => {
                   <Globe className="w-4 h-4 sm:w-5 sm:h-5" /> GitHub Profile
                 </button>
               </a>
-              <a href="https://drive.google.com/uc?export=download&id=153JO0_bGyY3gDGTL02KqqdwVNkrhsC-N" download="Ravindu_Sankalpa_CV.pdf" target="_blank" rel="noopener noreferrer" className="w-full lg:w-auto">
+              <a href="https://drive.google.com/uc?export=download&id=1QG5a1rfnAwUM61GM7ooA2Huaq4f1FvoW" download="Ravindu_Sankalpa_CV.pdf" target="_blank" rel="noopener noreferrer" className="w-full lg:w-auto">
                 <button data-aos="fade-up" data-aos-duration="1000" className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg border border-[#a855f7]/50 text-[#a855f7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#a855f7]/10 animate-bounce-slow delay-200">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5" /> Download CV
                 </button>
